@@ -8,6 +8,11 @@ export enum TokenType {  // Added tokens for the lexer to understand
   BinOp,
 }
 
+const KEYWORDS: Record<string, TokenType> = {
+  // hashmap
+  "let": TokenType.Let
+}
+
 export interface Token {
   value: string;
   type: TokenType;
@@ -15,6 +20,16 @@ export interface Token {
 
 function token (value = "", type: TokenType): Token {
   return {value, type};
+}
+
+function isAlpha (src: string) {
+  return src.toUpperCase() != src.toLowerCase();
+}
+
+function isInt (str: string) {
+  const c = str.charCodeAt(0);
+  const bounds = ['0'.charCodeAt(0), '9'.charCodeAt(0)];
+  return (c >= bounds[0] && c <= bounds[1])
 }
 
 export function tokenise (srcCode: string): Token[] {
@@ -34,6 +49,27 @@ export function tokenise (srcCode: string): Token[] {
     }
     else if (src[0] == "=") {
       tokens.push(token(src.shift(), TokenType.Equals));
+    }
+    else {
+      // Handling multicharacter tokens
+
+      // Building a number token
+      if (isInt(src[0])) {
+        let num = "";
+        while (src.length > 0 && isInt(src[0])) {
+          num += src.shift();
+        }  //while we hit numeric values
+
+        tokens.push(token(num, TokenType.Number));
+      }
+      else if (isAlpha(src[0])) {
+        let ident = "";
+        while (src.length > 0 && isAlpha(src[0])) {
+          ident += src.shift();
+        }  //while we hit numeric values
+
+        tokens.push(token(ident, TokenType.Identifier));
+      }
     }
   }
 
