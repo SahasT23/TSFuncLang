@@ -10,7 +10,9 @@ export enum TokenType {  // Added tokens for the lexer to understand
 
 const KEYWORDS: Record<string, TokenType> = {
   // hashmap
-  "let": TokenType.Let
+  "let": TokenType.Let,
+
+
 }
 
 export interface Token {
@@ -24,6 +26,10 @@ function token (value = "", type: TokenType): Token {
 
 function isAlpha (src: string) {
   return src.toUpperCase() != src.toLowerCase();
+}
+
+function isSkippable (str: string) {
+  return str == " " || str == "\n" || str == "\t";
 }
 
 function isInt (str: string) {
@@ -68,7 +74,21 @@ export function tokenise (srcCode: string): Token[] {
           ident += src.shift();
         }  //while we hit numeric values
 
+        // check for reserved keywords
+        const reserved = KEYWORDS[ident];
+        if (reserved == undefined) {
         tokens.push(token(ident, TokenType.Identifier));
+        } 
+        else {
+          tokens.push(token(ident, reserved));
+        }
+      }
+      else if (isSkippable(src[0])) {
+        src.shift(); // skips the character
+      }
+      else {
+        console.log("Unknown Character in source: ", src[0]);
+        
       }
     }
   }
