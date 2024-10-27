@@ -88,10 +88,15 @@ export function tokenise (srcCode: string): Token[] {
       }
       else {
         console.log("Unknown Character in source: ", src[0]);
-        Deno.execPath
+        Deno.exit(1);
       }
     }
   }
 
   return tokens;
+}
+
+const source = await Deno.readTextFile("./test.txt");
+for (const token of tokenise(source)) {
+  console.log(token);
 }
