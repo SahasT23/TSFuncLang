@@ -88,7 +88,7 @@ export function tokenise (srcCode: string): Token[] {
       }
       else {
         console.log("Unknown Character in source: ", src[0]);
-        
+        Deno.execPath
       }
     }
   }
