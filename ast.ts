@@ -1,6 +1,7 @@
 // add ast nodes for the parser
 
-export type NodeType = "Program" 
+export type NodeType = 
+| "Program" 
 | "NumericLiteral" 
 | "Identifier" 
 | "BinExp" 
@@ -32,6 +33,8 @@ export interface Identifier extends Expr {
   kind: "Identifier";
   symbol: string;
 }
+
+// Represents numeric constants inside of the source code
 
 export interface NumericLiteral extends Expr {
   kind: "NumericLiteral";

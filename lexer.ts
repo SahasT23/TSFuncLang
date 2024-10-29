@@ -6,6 +6,7 @@ export enum TokenType {  // Added tokens for the lexer to understand
   OpenParen, 
   CloseParen,
   BinOp,
+  EOF, // End of file token
 }
 
 const KEYWORDS: Record<string, TokenType> = {
@@ -73,6 +74,8 @@ export function tokenise (srcCode: string): Token[] {
         while (src.length > 0 && isAlpha(src[0])) {
           ident += src.shift();
         }  //while we hit numeric values
+        
+        tokens.push({type: TokenType.EOF, value: "EndOfFile"});
 
         // check for reserved keywords
         const reserved = KEYWORDS[ident];
