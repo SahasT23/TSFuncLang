@@ -4,7 +4,8 @@ import {
   Expr, 
   BinExp, 
   NumericLiteral, 
-  Identifier} 
+  Identifier,
+  NullLiteral} 
 from "./ast.ts";
 
 import { 
@@ -72,7 +73,7 @@ export default class Parser {
           left,
           right,
           operator,
-        } as BinExp;
+        } as BinExp
       }
 
       return left;
@@ -100,7 +101,10 @@ export default class Parser {
 
       switch (tk) {
         case TokenType.Identifier:
-          return { kind: "Identifier", symbol: this.eat().value } as Identifier; 
+          return { kind: "Identifier", symbol: this.eat().value } as Identifier;
+        case TokenType.Null:
+          this.eat();
+          return {kind: "NullLiteral", value: "null"} as NullLiteral;
         case TokenType.Number:
           return { kind: "NumericLiteral", value:parseFloat(this.eat().value) } as NumericLiteral; 
         case TokenType.OpenParen: {
