@@ -6,12 +6,14 @@ export enum TokenType {  // Added tokens for the lexer to understand
   OpenParen, 
   CloseParen,
   BinOp,
+  Null,
   EOF, // End of file token
 }
 
 const KEYWORDS: Record<string, TokenType> = {
   // hashmap
-  "let": TokenType.Let,
+  let: TokenType.Let,
+  null: TokenType.Null
 };
 
 export interface Token {
@@ -75,7 +77,7 @@ export function tokenise (srcCode: string): Token[] {
 
         // check for reserved keywords
         const reserved = KEYWORDS[ident];
-        if (reserved) {
+        if (typeof reserved == "number") {
         tokens.push(token(ident, reserved)); // swap
         } 
         else {
