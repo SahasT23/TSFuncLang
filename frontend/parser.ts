@@ -103,10 +103,10 @@ export default class Parser {
           return { kind: "Identifier", symbol: this.eat().value } as Identifier; 
         case TokenType.Number:
           return { kind: "NumericLiteral", value:parseFloat(this.eat().value) } as NumericLiteral; 
-        default:
+        
+          default:
           console.error("unexpected token found during parsing", this.atF());
           Deno.exit(1);
-          return {} as Stmt;
       }
     }
   }
