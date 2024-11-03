@@ -12,9 +12,7 @@ export enum TokenType {  // Added tokens for the lexer to understand
 const KEYWORDS: Record<string, TokenType> = {
   // hashmap
   "let": TokenType.Let,
-
-
-}
+};
 
 export interface Token {
   value: string;
@@ -74,32 +72,26 @@ export function tokenise (srcCode: string): Token[] {
         while (src.length > 0 && isAlpha(src[0])) {
           ident += src.shift();
         }  //while we hit numeric values
-        
-        tokens.push({type: TokenType.EOF, value: "EndOfFile"});
 
         // check for reserved keywords
         const reserved = KEYWORDS[ident];
-        if (reserved == undefined) {
-        tokens.push(token(ident, TokenType.Identifier));
+        if (reserved) {
+        tokens.push(token(ident, reserved)); // swap
         } 
         else {
-          tokens.push(token(ident, reserved));
+          tokens.push(token(ident, TokenType.Identifier)); // swap
         }
       }
       else if (isSkippable(src[0])) {
         src.shift(); // skips the character
       }
       else {
-        console.log("Unknown Character in source: ", src[0]);
+        console.log("Unknown Character in source: ", src[0].charCodeAt(0), src[0]);
         Deno.exit(1);
       }
     }
   }
 
+  tokens.push({type: TokenType.EOF, value: "EndOfFile"});
   return tokens;
-}
-
-const source = await Deno.readTextFile("./test.txt");
-for (const token of tokenise(source)) {
-  console.log(token);
 }
