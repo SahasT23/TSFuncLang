@@ -103,7 +103,13 @@ export default class Parser {
           return { kind: "Identifier", symbol: this.eat().value } as Identifier; 
         case TokenType.Number:
           return { kind: "NumericLiteral", value:parseFloat(this.eat().value) } as NumericLiteral; 
-        
+        case TokenType.OpenParen: {
+          this.eat();
+          const value = this.parse_exp();
+          this.expect ( TokenType.CloseParen, "Unexpected token inside parentheses, need a closed parentheses");
+          return value;
+        }
+
           default:
           console.error("unexpected token found during parsing", this.atF());
           Deno.exit(1);
