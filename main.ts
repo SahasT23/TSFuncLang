@@ -18,5 +18,6 @@ function repl() {
       console.log(program);
 
       const result = evaluate(program);
+      console.log(result);
     }
 }
